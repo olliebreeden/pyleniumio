@@ -18,18 +18,18 @@ However, both Waits require the condition to use a WebDriver. In the example bel
 
 ```python
 # .is_displayed() returns a bool, so the return value is True
-py.wait().until(lambda x: x.find_element_by_id('foo').is_displayed())
+py.wait().until(lambda x: x.find_element(By.ID, 'foo').is_displayed())
 ```
 
 ```python
 # the WebElement is returned once the element is found in the DOM
-py.wait().until(lambda x: x.find_element_by_id('foo'))
+py.wait().until(lambda x: x.find_element(By.ID, 'foo'))
 ```
 
 ```python
 # because use_py=True, this will now return Element instead
 # also, this will wait up to 5 seconds instead of the default in pylenium.json
-py.wait(5, use_py=True).until(lambda x: x.find_element_by_id('foo'))
+py.wait(5, use_py=True).until(lambda x: x.find_element(By.ID, 'foo'))
 ```
 
 ## Syntax
@@ -60,7 +60,7 @@ This is the default Wait object. This will return WebElement, so you won't have 
 {% code title="defaults" %}
 ```python
 # uses WebDriverWait and returns WebElement once '#save' is found
-py.wait().until(lambda x: x.find_element_by_id('#save')).click()
+py.wait().until(lambda x: x.find_element(By.ID, 'save')).click()
 ```
 {% endcode %}
 
@@ -69,7 +69,7 @@ py.wait().until(lambda x: x.find_element_by_id('#save')).click()
 {% code title="WebDriverWait with custom timeout" %}
 ```python
 # uses WebDriverWait but overrides the default wait_time used in pylenium.json
-py.wait(5).until(lambda x: x.find_element_by_id('#login-button').is_enabled())
+py.wait(5).until(lambda x: x.find_element(By.ID, 'login-button').is_enabled())
 ```
 {% endcode %}
 
@@ -101,13 +101,13 @@ If you want to return Pylenium objects like `Element` and `Elements`, then set `
 
 {% code title="PyleniumWait with default timeout" %}
 ```python
-py.wait(use_py=True).until(lambda x: x.find_element_by_id('.menu')).hover()
+py.wait(use_py=True).until(lambda x: x.find_element(By.ID, 'menu')).hover()
 ```
 {% endcode %}
 
 {% code title="PyleniumWait with custom timeout" %}
 ```python
-py.wait(5, use_py=True).until(lambda x: x.find_element_by_id('.menu')).hover()
+py.wait(5, use_py=True).until(lambda x: x.find_element(By.ID, 'menu')).hover()
 ```
 {% endcode %}
 

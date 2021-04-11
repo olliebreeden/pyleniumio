@@ -1,5 +1,6 @@
 import os
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 from pylenium.a11y import PyleniumAxe
 from pylenium.driver import Pylenium
 
@@ -60,20 +61,20 @@ def test_get_xpath(py):
     assert py.should().contain_title('QA at the Point')
 
 
-def test_find_xpath(py):
-    py.visit('https://deckshop.pro')
-    assert py.findx('//a[@class="nav-link"]').should().be_greater_than(1)
+def test_find_xpath(py: Pylenium):
+    py.visit('https://the-internet.herokuapp.com/status_codes')
+    assert py.findx('//div[@class="example"]//li').should().have_length(4)
 
 
-def test_hover_and_click_to_page_transition(py):
+def test_hover_and_click_to_page_transition(py: Pylenium):
     py.visit('https://qap.dev')
     py.get('a[href="/about"]').hover().get('a[href="/leadership"][class*=Header]').click()
-    assert py.contains('Carlos Kidman').should().have_text('Carlos Kidman')
+    assert py.contains('Carlos Kidman').should().contain_text('Carlos Kidman')
 
 
 def test_pylenium_wait_until(py):
     py.visit('https://qap.dev')
-    element = py.wait(use_py=True).until(lambda x: x.find_element_by_css_selector('[href="/about"]'))
+    element = py.wait(use_py=True).until(lambda x: x.find_element(By.CSS_SELECTOR, '[href="/about"]'))
     assert element.tag_name() == 'a'
     assert element.hover()
 
@@ -81,22 +82,22 @@ def test_pylenium_wait_until(py):
 def test_pylenium_wait_until_with_seconds(py):
     py.visit('https://qap.dev')
     py.wait(use_py=True).sleep(2)
-    element = py.wait(5, use_py=True).until(lambda x: x.find_element_by_css_selector('[href="/about"]'))
+    element = py.wait(5, use_py=True).until(lambda x: x.find_element(By.CSS_SELECTOR, '[href="/about"]'))
     assert element.tag_name() == 'a'
     assert element.hover()
 
 
 def test_webdriver_wait_until(py):
     py.visit('https://qap.dev')
-    element = py.wait(5).until(lambda x: x.find_element_by_css_selector('[href="/about"]'))
+    element = py.wait(5).until(lambda x: x.find_element(By.CSS_SELECTOR, '[href="/about"]'))
     assert element.tag_name == 'a'
 
 
-def test_switch_to_frame_then_back(py):
+def test_switch_to_frame_then_back(py: Pylenium):
     py.visit('http://the-internet.herokuapp.com/iframe')
-    py.switch_to.frame('mce_0_ifr').get('#tinymce').clear().type('foo')
+    py.switch_to.frame_by_id('mce_0_ifr').get('#tinymce').clear().type('foo')
     assert py.switch_to.default_content().contains('An iFrame').tag_name() == 'h3'
-    py.switch_to.frame('mce_0_ifr').get('#tinymce').type('bar')
+    py.switch_to.frame_by_id('mce_0_ifr').get('#tinymce').type('bar')
     assert py.get('#tinymce').text() == 'foobar'
     assert py.switch_to.parent_frame().contains('An iFrame').tag_name() == 'h3'
 
@@ -112,7 +113,7 @@ def test_switch_to_frame_by_element(py):
 
 def test_have_url(py):
     py.visit('https://qap.dev')
-    py.should().have_url('https://www.qap.dev/')
+    assert py.should().have_url('https://www.qap.dev/')
 
 
 def test_loading_extension_to_browser(py, project_root):

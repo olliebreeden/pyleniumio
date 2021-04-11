@@ -6,19 +6,34 @@ class SwitchTo:
     def __init__(self, pylenium):
         self._py = pylenium
 
-    def frame(self, name_or_id: str, timeout: int = 0):
-        """ Switch the driver's context to the new frame given the name or id of the element.
+    def frame_by_id(self, frame_id: str, timeout: int = 0):
+        """ Switch the driver's context to the new frame given the id of the element.
 
         Args:
-            name_or_id: The frame's `id` or `name` attribute value
-            timeout: The number of seconds to wait for the frame to be switched to.
+            frame_id: The frame's `id` attribute value
+            timeout: The number of seconds to wait for the frame to be switched to
 
         Examples:
-            # Switch to an iframe
-            py.switch_to.frame('main-frame')
+            py.switch_to.frame_by_id('iframe-id')
         """
-        self._py.log.info(f'[STEP] py.switch_to.frame() - Switch to frame using name or id: ``{name_or_id}``')
-        self._py.wait(timeout).until(ec.frame_to_be_available_and_switch_to_it(name_or_id))
+        self._py.log.info(f'[STEP] py.switch_to.frame_by_id() - Switch to frame using id: ``{frame_id}``')
+        frame = self._py.get(f'#{frame_id}', timeout=timeout)
+        self._py.wait(timeout).until(ec.frame_to_be_available_and_switch_to_it(frame.webelement))
+        return self._py
+
+    def frame_by_name(self, name: str, timeout: int = 0):
+        """ Switch the driver's context to the new frame given the name of the element.
+
+        Args:
+            name: The frame's `name` attribute value
+            timeout: The number of seconds to wait for the frame to be switched to
+
+        Examples:
+            py.switch_to.frame_by_name('iframe-name')
+        """
+        self._py.log.info(f'[STEP] py.switch_to.frame_by_name() - Switch to frame using name: ``{name}``')
+        frame = self._py.get(f'[name="{name}"]', timeout=timeout)
+        self._py.wait(timeout).until(ec.frame_to_be_available_and_switch_to_it(frame.webelement))
         return self._py
 
     def frame_by_element(self, element: Element, timeout: int = 0):
@@ -33,7 +48,7 @@ class SwitchTo:
             py.switch_to.frame_by_element(iframe)
         """
         self._py.log.info('[STEP] py.switch_to.frame_by_element() - Switch to frame using an Element.')
-        self._py.wait(timeout).until(ec.frame_to_be_available_and_switch_to_it(element.locator))
+        self._py.wait(timeout).until(ec.frame_to_be_available_and_switch_to_it(element.webelement))
         return self._py
 
     def parent_frame(self):
@@ -51,7 +66,7 @@ class SwitchTo:
         self._py.webdriver.switch_to.default_content()
         return self._py
 
-    def window(self, name_or_handle='', index=0):
+    def window(self, name_or_handle='', index: int = None):
         """ Switch the driver's context to the specified Window or Browser Tab.
 
         Args:
@@ -68,7 +83,7 @@ class SwitchTo:
             # Switch to a newly opened Browser Tab by index
             py.switch_to.window(index=1)
         """
-        if index:
+        if index is not None:
             handle = self._py.webdriver.window_handles[index]
             self._py.log.info(f'[STEP] py.switch_to.window() - Switch to a Tab or Window by index: ``{index}``')
             self._py.webdriver.switch_to.window(handle)

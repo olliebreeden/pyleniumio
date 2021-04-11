@@ -3,12 +3,14 @@ from typing import Tuple, Optional, Union
 
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 
 from pylenium.element import Element, Elements
 
 
 class PyleniumWait:
     """ The Pylenium version of Wait that returns Element and Elements objects."""
+
     def __init__(self, py, webdriver, timeout, ignored_exceptions: Optional[Tuple] = None):
         self._py = py
         self._webdriver = webdriver
@@ -44,9 +46,9 @@ class PyleniumWait:
 
         Examples:
             # return an Element
-            py.wait().until(lambda x: x.find_element_by_id('foo'), 'element "foo" was not found')
+            py.wait().until(lambda x: x.find_element(By.ID, 'foo'), 'element "foo" was not found')
             # return Elements
-            py.wait().until(lambda x: x.find_elements_by_xpath('//a'))
+            py.wait().until(lambda x: x.find_elements(By.XPATH, '//a'))
             # return True
             py.wait(5).until(lambda x: x.title  == 'QA at the Point')
         """

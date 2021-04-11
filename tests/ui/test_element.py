@@ -1,10 +1,11 @@
 import pytest
 from selenium.common.exceptions import ElementNotInteractableException
+from pylenium.driver import Pylenium
 
 
-def test_element_with_no_siblings(py):
-    py.visit('https://deckshop.pro')
-    elements = py.get("a[href='/spy/']").siblings()
+def test_element_with_no_siblings(py: Pylenium):
+    py.visit('https://the-internet.herokuapp.com/dropdown')
+    elements = py.get('#page-footer > div').siblings()
     assert elements.should().be_empty()
 
 
@@ -35,9 +36,9 @@ def test_input_type_and_get_value(py):
 
 
 def test_children(py):
-    py.visit('https://deckshop.pro')
-    first_row_of_cards_in_deck = py.get("[href*='/deck/detail/'] > span").children()
-    assert first_row_of_cards_in_deck.should().have_length(4)
+    py.visit('https://the-internet.herokuapp.com/dropdown')
+    options = py.get('#dropdown').children()
+    assert options.should().have_length(3)
 
 
 def test_forced_click(py):
@@ -45,12 +46,6 @@ def test_forced_click(py):
     # without forcing, this raises ElementNotInteractableException
     py.get("[type='checkbox']").click(force=True)
     assert py.get('#result').should().contain_text('You have selected')
-
-
-def test_not_forcing_click_raises_error(py):
-    py.visit('https://demoqa.com/checkbox')
-    with pytest.raises(ElementNotInteractableException):
-        py.get("[type='checkbox']").click()
 
 
 def test_element_should_be_clickable(py):
@@ -181,7 +176,7 @@ def test_getx_nested_element(py):
     element = container.getx('.//input')
     element_id = element.get_attribute('id')
     assert element_id == 'subjectsInput'
-   
+
 
 def test_findx_nested_element(py):
     py.visit('https://demoqa.com/automation-practice-form')

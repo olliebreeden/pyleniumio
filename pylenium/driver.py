@@ -488,10 +488,10 @@ class Pylenium:
 
         Examples:
             # use the default wait_time in pylenium.json
-            py.wait().until(lambda x: x.find_element_by_id('foo').get_attribute('style') == 'display: block;')
+            py.wait().until(lambda x: x.find_element(By.ID, 'foo').get_attribute('style') == 'display: block;')
             # use a different timeout to control how long to wait for
-            py.wait(5).until(lambda x: x.find_element_by_id('foo').is_displayed())
-            py.wait(15, [NoSuchElementException, WebDriverException]).until(lambda x: x.find_element_by_id('foo'))
+            py.wait(5).until(lambda x: x.find_element(By.ID, 'foo').is_displayed())
+            py.wait(15, [NoSuchElementException, WebDriverException]).until(lambda x: x.find_element(By.ID, 'foo'))
         """
         if timeout:  # if not None and greater than 0
             return self._wait.build(timeout, use_py, ignored_exceptions)

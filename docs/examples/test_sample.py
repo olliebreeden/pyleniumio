@@ -29,7 +29,7 @@ def test_pylenium_basics(py):
 def test_access_selenium(py):
     py.visit('https://google.com')
     # access the wrapped WebDriver with `py.webdriver`
-    search_field = py.webdriver.find_element_by_css_selector('[name="q"]')
+    search_field = py.webdriver.find_element(By.CSS_SELECTOR, '[name="q"]')
     # access the wrapped WebElement with `Element.webelement`
     assert py.get('[name"q"]').webelement.is_enabled()
     # you can store elements and objects to be used later since

@@ -1,6 +1,7 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 from pylenium import utils
 
 
@@ -17,7 +18,7 @@ def inject(driver: WebDriver, version='3.5.1', timeout=10):
     driver.execute_async_script(load_jquery, jquery_url, None)
     WebDriverWait(driver, timeout).until(lambda drvr: drvr.execute_script('return typeof(jQuery) !== "undefined";'),
                                          message='jQuery was "undefined" which means it did not load within timeout.')
-    iframes = driver.find_elements_by_tag_name('iframe')
+    iframes = driver.find_elements(By.TAG_NAME, 'iframe')
     for iframe in iframes:
         driver.execute_async_script(load_jquery, jquery_url, iframe)
 
