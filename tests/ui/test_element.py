@@ -8,20 +8,20 @@ THE_INTERNET = 'https://the-internet.herokuapp.com'
 DEMO_QA = 'https://demoqa.com'
 
 
-def test_element_with_no_siblings(py: Pylenium):
+def test_no_siblings_should_be_empty(py: Pylenium):
     py.visit(f'{THE_INTERNET}/dropdown')
     elements = py.get('#page-footer > div').siblings()
     assert elements.should().be_empty()
 
 
-def test_element_parent_and_siblings(py: Pylenium):
+def test_parent_element_has_siblings(py: Pylenium):
     py.visit(f'{DEMO_QA}/menu')
     parent = py.contains('Main Item 1').parent()
     assert parent.tag_name() == 'li'
     assert parent.siblings().should().have_length(2)
 
 
-def test_element_text(py: Pylenium):
+def test_element_should_have_text(py: Pylenium):
     py.visit(f'{DEMO_QA}/text-box')
     assert py.get('#userName-label').should().have_text('Full Name')
 
